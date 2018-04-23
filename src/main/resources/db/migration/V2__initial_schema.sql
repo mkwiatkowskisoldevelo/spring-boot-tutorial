@@ -1,0 +1,15 @@
+CREATE TABLE receipts (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	buyers_name VARCHAR(256) NOT NULL,
+    date timestamp NOT NULL
+);
+
+CREATE TABLE products (
+	id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+	name VARCHAR(256) NOT NULL UNIQUE,
+	price DOUBLE NOT NULL,
+	receipt_id INT,
+	FOREIGN KEY (receipt_id)
+	    REFERENCES receipts(id)
+	    ON UPDATE CASCADE
+);
