@@ -1,5 +1,8 @@
 package com.sda.springbootdemo.exercises.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +17,8 @@ public abstract class BaseEntity {
     @Column(name = "id", columnDefinition = "BINARY(16)")
     protected UUID id;*/
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected Long id;
