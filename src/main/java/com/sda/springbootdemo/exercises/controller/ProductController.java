@@ -77,12 +77,20 @@ public class ProductController {
      * Used for getting all {@link Product}.
      * Returns 200 HTTP code if products were found.
      *
-     * @return all products stored in data base
+     * @param name used for searching products containing given param ignoring case
+     * @param minPrice used for searching products with prices greater equal than given value
+     * @param maxPrice used for searching products with prices lesser equal than given value
+     * @param sort if value is "price" result will be sorted ascending by price
+     * @return all products matching parameters
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> getAll() {
-        return productService.findAll();
+    public List<Product> search(
+        @RequestParam(value = "name", required = false, defaultValue = "") String name,
+        @RequestParam(value = "minPrice", required = false, defaultValue = "0") Double minPrice,
+        @RequestParam(value = "maxPrice", required = false, defaultValue = "10000") Double maxPrice,
+        @RequestParam(value = "sort", required = false) String sort) {
+        return productService.search(name, minPrice, maxPrice, sort);
     }
 
     /**

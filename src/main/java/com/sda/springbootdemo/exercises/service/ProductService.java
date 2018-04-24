@@ -50,6 +50,58 @@ public class ProductService {
     }
 
     /**
+     * Searches for {@link Product} saved in data base.
+     *
+     * @param name used for searching products containing given param ignoring case
+     * @param minPrice used for searching products with prices greater equal than given value
+     * @param maxPrice used for searching products with prices lesser equal than given value
+     * @return found products matching given parameters
+     */
+    public List<Product> searchNullable(String name, Double minPrice, Double maxPrice) {
+        if (null != name && null != minPrice && null != maxPrice) {
+            return productRepository.findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqual(
+                name, minPrice, maxPrice);
+        } else if (null != name && null != minPrice) {
+            return productRepository.findByNameIgnoreCaseContainingAndPriceGreaterThanEqual(
+                name, minPrice);
+        } else if (null != name && null != maxPrice) {
+            return productRepository.findByNameIgnoreCaseContainingAndPriceLessThanEqual(
+                name, maxPrice);
+        } else if (null != minPrice && null != maxPrice) {
+            return productRepository.findByPriceGreaterThanEqualAndPriceLessThanEqual(
+                minPrice, maxPrice);
+        } else if (null != name) {
+            return productRepository.findByNameIgnoreCaseContaining(name);
+        } else if (null != minPrice) {
+            return productRepository.findByPriceGreaterThanEqual(minPrice);
+        } else if (null != maxPrice) {
+            return productRepository.findByPriceLessThanEqual(maxPrice);
+        } else {
+            return productRepository.findAll();
+        }
+    }
+
+    /**
+     * Searches for {@link Product} saved in data base.
+     *
+     * @param name used for searching products containing given param ignoring case
+     * @param minPrice used for searching products with prices greater equal than given value
+     * @param maxPrice used for searching products with prices lesser equal than given value
+     * @param sort if value is "price" result will be sorted ascending by price
+     * @return found products matching given parameters
+     */
+    public List<Product> search(String name, Double minPrice, Double maxPrice, String sort) {
+        if ("price".equalsIgnoreCase(sort)) {
+            return productRepository
+                .findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqualOrderByPriceAsc(
+                    name, minPrice, maxPrice);
+        }
+        return productRepository
+            .findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqual(
+                name, minPrice, maxPrice);
+    }
+
+    /**
      * Removes {@link Product} with given id, if there is none with given id
      * {@link NotFoundException} will be thrown.
      *

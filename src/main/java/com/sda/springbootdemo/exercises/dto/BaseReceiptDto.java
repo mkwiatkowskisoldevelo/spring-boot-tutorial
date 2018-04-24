@@ -16,7 +16,7 @@ public class BaseReceiptDto extends BaseDto {
     protected LocalDateTime date;
 
     public BaseReceiptDto(Receipt receipt) {
-        this(receipt.getId(), receipt.getBuyersName(), receipt.getDate());
+        this(receipt.getId(), receipt.getBuyer(), receipt.getDate());
     }
 
     public BaseReceiptDto(Long id, String buyersName, LocalDateTime date) {

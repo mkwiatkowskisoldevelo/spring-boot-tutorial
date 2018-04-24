@@ -13,4 +13,25 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     boolean existsByName(String name);
     Optional<Product> findByNameIgnoreCase(String name);
+
+    List<Product> findByNameIgnoreCaseContaining(String name);
+    List<Product> findByPriceGreaterThanEqual(Double minPrice);
+    List<Product> findByPriceLessThanEqual(Double maxPrice);
+    List<Product> findByNameIgnoreCaseContainingAndPriceLessThanEqual(
+        String name,
+        Double maxPrice);
+    List<Product> findByNameIgnoreCaseContainingAndPriceGreaterThanEqual(
+        String name,
+        Double minPrice);
+    List<Product> findByPriceGreaterThanEqualAndPriceLessThanEqual(
+        Double minPrice,
+        Double maxPrice);
+    List<Product> findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqual(
+        String name,
+        Double minPrice,
+        Double maxPrice);
+    List<Product> findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqualOrderByPriceAsc(
+        String name,
+        Double minPrice,
+        Double maxPrice);
 }
