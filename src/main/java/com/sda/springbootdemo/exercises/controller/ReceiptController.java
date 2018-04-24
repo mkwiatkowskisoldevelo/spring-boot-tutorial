@@ -6,6 +6,7 @@ import com.sda.springbootdemo.exercises.exception.NotFoundException;
 import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
 import com.sda.springbootdemo.exercises.service.ReceiptService;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
