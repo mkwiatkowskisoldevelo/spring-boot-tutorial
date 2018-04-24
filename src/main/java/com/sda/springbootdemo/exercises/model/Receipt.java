@@ -22,7 +22,7 @@ import java.util.List;
 public class Receipt extends BaseEntity {
 
     @Column(nullable = false)
-    private String buyersName;
+    private String buyer;
 
     @Column(nullable = false)
     private LocalDateTime date;

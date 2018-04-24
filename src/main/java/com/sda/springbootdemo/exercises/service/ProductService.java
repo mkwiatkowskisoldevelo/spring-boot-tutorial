@@ -80,6 +80,18 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /**
+     * Retrieves {@link Product} by name ignoring case,
+     * if none found {@link NotFoundException} will be thrown.
+     *
+     * @param name product id that will be updated
+     * @return found product
+     */
+    public Product findProductByNameIgnoreCase(String name) {
+        return productRepository.findByNameIgnoreCase(name)
+            .orElseThrow(() -> new NotFoundException(String.format("Product with name %s not found", name)));
+    }
+
     // validates name uniqueness,
     // current name is for the case we are updating product, but not changing the name,
     // for create current name should be null

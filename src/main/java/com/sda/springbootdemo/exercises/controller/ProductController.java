@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -96,5 +97,19 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void remove(@PathVariable("id") Long id) {
         productService.remove(id);
+    }
+
+    /**
+     * Called for GET serverUrl/products/byName?name={name} requests.
+     * Used for retrieving existing {@link Product} by name ignoring case.
+     * Returns 200 HTTP code if product with given name was found.
+     * Returns 404 HTTP code if product with given name was not found.
+     *
+     * @param name request parameter used for searching by name
+     */
+    @GetMapping("/byName")
+    @ResponseStatus(HttpStatus.OK)
+    public Product findByName(@RequestParam(value = "name") String name) {
+        return productService.findProductByNameIgnoreCase(name);
     }
 }
