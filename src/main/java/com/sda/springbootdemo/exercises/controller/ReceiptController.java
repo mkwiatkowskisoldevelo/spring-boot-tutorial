@@ -3,12 +3,14 @@ package com.sda.springbootdemo.exercises.controller;
 import com.sda.springbootdemo.exercises.dto.ProductDto;
 import com.sda.springbootdemo.exercises.dto.ReceiptDto;
 import com.sda.springbootdemo.exercises.exception.NotFoundException;
+import com.sda.springbootdemo.exercises.model.Product;
 import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
 import com.sda.springbootdemo.exercises.service.ReceiptService;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,6 +66,14 @@ public class ReceiptController {
                 .orElseThrow(() -> new NotFoundException(String.format("No product find with %s id", id)));
         receipt.setId(id);
         return new ReceiptDto(receiptRepository.save(savedReceipt));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void remove(@PathVariable("id") Long id) {
+        Receipt receipt = receiptRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(String.format("Receipt with id %s not found", id)));
+        receiptRepository.delete(receipt);
     }
 
     @GetMapping("/{id}/summary")
