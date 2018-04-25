@@ -4,6 +4,8 @@ import com.sda.springbootdemo.exercises.exception.NotFoundException;
 import com.sda.springbootdemo.exercises.model.Product;
 import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +19,14 @@ public class ReceiptService {
     @Autowired
     private ReceiptRepository receiptRepository;
 
-    public List<Receipt> search(LocalDateTime startDate, LocalDateTime endDate) {
+    public List<Receipt> search(LocalDate startDate, LocalDate endDate) {
         if (null != startDate && null != endDate) {
-            return receiptRepository.findByDateGreaterThanEqualAndDateLessThanEqual(startDate, endDate);
+            return receiptRepository.findByDateGreaterThanEqualAndDateLessThanEqual(
+                startDate.atStartOfDay(), endDate.atTime(LocalTime.MAX));
         } else if (null != startDate) {
-            return receiptRepository.findByDateGreaterThanEqual(startDate);
+            return receiptRepository.findByDateGreaterThanEqual(startDate.atStartOfDay());
         } else if (null != endDate) {
-            return receiptRepository.findByDateLessThanEqual(endDate);
+            return receiptRepository.findByDateLessThanEqual(endDate.atTime(LocalTime.MAX));
         }
         return receiptRepository.findAll();
     }

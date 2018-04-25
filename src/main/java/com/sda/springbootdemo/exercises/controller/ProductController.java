@@ -2,8 +2,9 @@ package com.sda.springbootdemo.exercises.controller;
 
 import com.sda.springbootdemo.exercises.model.Product;
 import com.sda.springbootdemo.exercises.service.ProductService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -80,17 +81,17 @@ public class ProductController {
      * @param name used for searching products containing given param ignoring case
      * @param minPrice used for searching products with prices greater equal than given value
      * @param maxPrice used for searching products with prices lesser equal than given value
-     * @param sort if value is "price" result will be sorted ascending by price
+     * @param pageable contains sorting and paging parameters
      * @return all products matching parameters
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Product> search(
+    public Page<Product> search(
         @RequestParam(value = "name", required = false, defaultValue = "") String name,
         @RequestParam(value = "minPrice", required = false, defaultValue = "0") Double minPrice,
         @RequestParam(value = "maxPrice", required = false, defaultValue = "10000") Double maxPrice,
-        @RequestParam(value = "sort", required = false) String sort) {
-        return productService.search(name, minPrice, maxPrice, sort);
+        Pageable pageable) {
+        return productService.search(name, minPrice, maxPrice, pageable);
     }
 
     /**
@@ -114,6 +115,7 @@ public class ProductController {
      * Returns 404 HTTP code if product with given name was not found.
      *
      * @param name request parameter used for searching by name
+     * @return found product with given name
      */
     @GetMapping("/byName")
     @ResponseStatus(HttpStatus.OK)

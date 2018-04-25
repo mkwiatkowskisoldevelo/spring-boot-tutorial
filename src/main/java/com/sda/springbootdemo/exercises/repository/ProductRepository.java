@@ -4,6 +4,8 @@ import com.sda.springbootdemo.exercises.model.Product;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
@@ -34,4 +36,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
         String name,
         Double minPrice,
         Double maxPrice);
+    Page<Product> findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqual(
+        String name,
+        Double minPrice,
+        Double maxPrice,
+        Pageable pageable);
 }

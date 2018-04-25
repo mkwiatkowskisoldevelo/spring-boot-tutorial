@@ -1,6 +1,7 @@
 package com.sda.springbootdemo.exercises.repository;
 
 import com.sda.springbootdemo.exercises.model.Receipt;
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;

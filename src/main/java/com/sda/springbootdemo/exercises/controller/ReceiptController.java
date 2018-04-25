@@ -4,9 +4,11 @@ import com.sda.springbootdemo.exercises.exception.NotFoundException;
 import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
 import com.sda.springbootdemo.exercises.service.ReceiptService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,8 +40,10 @@ public class ReceiptController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<Receipt> search(
-            @RequestParam(value = "startDate", required = false) LocalDateTime startDate,
-            @RequestParam(value = "endDate", required = false) LocalDateTime endDate) {
+            @RequestParam(value = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(value = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
         return receiptService.search(startDate, endDate);
     }
 
@@ -48,15 +52,16 @@ public class ReceiptController {
     public Receipt get(@PathVariable("id") Long id) {
         return receiptRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException(String.format("No receipt find with %s id", id)));
-}
+    }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Receipt update(@PathVariable("id") Long id, @RequestBody Receipt receipt) {
-        Receipt savedReceipt = receiptRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException(String.format("No product find with %s id", id)));
+        if (receiptRepository.existsById(id)) {
+            throw new NotFoundException(String.format("No receipt find with %s id", id));
+        }
         receipt.setId(id);
-        return receiptRepository.save(savedReceipt);
+        return receiptRepository.save(receipt);
     }
 
     @DeleteMapping("/{id}")

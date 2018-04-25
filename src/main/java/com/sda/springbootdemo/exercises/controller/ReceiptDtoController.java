@@ -1,15 +1,21 @@
 package com.sda.springbootdemo.exercises.controller;
 
+import static java.util.stream.Collectors.toList;
+
 import com.sda.springbootdemo.exercises.dto.ProductDto;
 import com.sda.springbootdemo.exercises.dto.ReceiptDto;
 import com.sda.springbootdemo.exercises.exception.NotFoundException;
+import com.sda.springbootdemo.exercises.model.Product;
 import com.sda.springbootdemo.exercises.model.Receipt;
+import com.sda.springbootdemo.exercises.repository.ProductRepository;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
 import com.sda.springbootdemo.exercises.service.ReceiptService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,9 +23,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequestMapping("/api/receipts")
 public class ReceiptDtoController {
 
     @Autowired
@@ -27,6 +37,9 @@ public class ReceiptDtoController {
 
     @Autowired
     private ReceiptRepository receiptRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -37,12 +50,15 @@ public class ReceiptDtoController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ReceiptDto> search(
-        @RequestParam(value = "startDate", required = false) LocalDateTime startDate,
-        @RequestParam(value = "endDate", required = false) LocalDateTime endDate) {
+        @RequestParam(value = "startDate", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+        @RequestParam(value = "endDate", required = false)
+        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        List<Receipt> receipts = receiptService.search(startDate, endDate);
         return receiptService.search(startDate, endDate)
             .stream()
             .map(ReceiptDto::new)
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 
     @GetMapping("/{id}")
@@ -75,7 +91,7 @@ public class ReceiptDtoController {
         return receiptService.summary(id);
     }
 
-    @GetMapping("/summary")
+    @GetMapping("/summaries")
     @ResponseStatus(HttpStatus.OK)
     public Double summary(@RequestParam List<Long> ids) {
         return receiptService.summary(ids);
@@ -89,6 +105,6 @@ public class ReceiptDtoController {
         return receipt.getProducts()
             .stream()
             .map(ProductDto::new)
-            .collect(Collectors.toList());
+            .collect(toList());
     }
 }

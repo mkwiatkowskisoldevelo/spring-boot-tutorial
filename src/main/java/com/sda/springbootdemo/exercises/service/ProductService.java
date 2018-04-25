@@ -7,6 +7,8 @@ import com.sda.springbootdemo.exercises.repository.ProductRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -87,18 +89,13 @@ public class ProductService {
      * @param name used for searching products containing given param ignoring case
      * @param minPrice used for searching products with prices greater equal than given value
      * @param maxPrice used for searching products with prices lesser equal than given value
-     * @param sort if value is "price" result will be sorted ascending by price
+     * @param pageable contains sorting and paging parameters
      * @return found products matching given parameters
      */
-    public List<Product> search(String name, Double minPrice, Double maxPrice, String sort) {
-        if ("price".equalsIgnoreCase(sort)) {
-            return productRepository
-                .findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqualOrderByPriceAsc(
-                    name, minPrice, maxPrice);
-        }
+    public Page<Product> search(String name, Double minPrice, Double maxPrice, Pageable pageable) {
         return productRepository
             .findByNameIgnoreCaseContainingAndPriceGreaterThanEqualAndPriceLessThanEqual(
-                name, minPrice, maxPrice);
+                name, minPrice, maxPrice, pageable);
     }
 
     /**
