@@ -1,6 +1,7 @@
 package com.sda.springbootdemo.exercises.repository;
 
 import com.sda.springbootdemo.exercises.model.Product;
+import com.sda.springbootdemo.exercises.repository.custom.ProductRepositoryCustom;
 import java.util.List;
 import java.util.Optional;
 import javax.transaction.Transactional;
@@ -11,7 +12,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
 
     boolean existsByName(String name);
     Optional<Product> findByNameIgnoreCase(String name);

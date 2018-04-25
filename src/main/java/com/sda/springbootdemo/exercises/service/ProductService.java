@@ -3,7 +3,9 @@ package com.sda.springbootdemo.exercises.service;
 import com.sda.springbootdemo.exercises.exception.NotFoundException;
 import com.sda.springbootdemo.exercises.exception.ValidationException;
 import com.sda.springbootdemo.exercises.model.Product;
+import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ProductRepository;
+import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
 import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ReceiptRepository receiptRepository;
 
     /**
      * Creates {@link Product} using repository and validates if name is unique.
@@ -139,6 +144,12 @@ public class ProductService {
     public Product findProductByNameIgnoreCase(String name) {
         return productRepository.findByNameIgnoreCase(name)
             .orElseThrow(() -> new NotFoundException(String.format("Product with name %s not found", name)));
+    }
+
+    public Page<Product> findProductByNameAndReceipt(String name, Long receiptId, Pageable pageable) {
+        Receipt receipt = receiptRepository.findById(receiptId)
+            .orElseThrow(() -> new NotFoundException(String.format("Receipt with id %s not found", receiptId)));
+        return productRepository.search(name, receipt, pageable);
     }
 
     // validates name uniqueness,

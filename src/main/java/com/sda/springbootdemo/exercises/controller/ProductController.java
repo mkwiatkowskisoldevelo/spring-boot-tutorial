@@ -122,4 +122,13 @@ public class ProductController {
     public Product findByName(@RequestParam(value = "name") String name) {
         return productService.findProductByNameIgnoreCase(name);
     }
+
+    @GetMapping("/byNameAndReceipt")
+    @ResponseStatus(HttpStatus.OK)
+    public Page<Product> findByNameAndReceipt(
+        @RequestParam("name") String name,
+        @RequestParam("receiptId") Long receiptId,
+        Pageable pageable) {
+        return productService.findProductByNameAndReceipt(name, receiptId, pageable);
+    }
 }
