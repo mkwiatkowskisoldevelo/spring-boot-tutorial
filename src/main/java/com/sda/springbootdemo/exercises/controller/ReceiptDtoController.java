@@ -93,7 +93,7 @@ public class ReceiptDtoController {
 
     @GetMapping("/summaries")
     @ResponseStatus(HttpStatus.OK)
-    public Double summary(@RequestParam List<Long> ids) {
+    public Double summary(@RequestParam(value = "id") List<Long> ids) {
         return receiptService.summary(ids);
     }
 

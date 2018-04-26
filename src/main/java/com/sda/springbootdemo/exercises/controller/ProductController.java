@@ -1,6 +1,7 @@
 package com.sda.springbootdemo.exercises.controller;
 
 import com.sda.springbootdemo.exercises.model.Product;
+import com.sda.springbootdemo.exercises.repository.ProductRepository;
 import com.sda.springbootdemo.exercises.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,9 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     /**
      * Called for POST serverUrl/products requests.
@@ -123,12 +127,10 @@ public class ProductController {
         return productService.findProductByNameIgnoreCase(name);
     }
 
-    @GetMapping("/byNameAndReceipt")
+    @GetMapping("/byNamePaged")
     @ResponseStatus(HttpStatus.OK)
-    public Page<Product> findByNameAndReceipt(
-        @RequestParam("name") String name,
-        @RequestParam("receiptId") Long receiptId,
+    public Page<Product> findByName(
         Pageable pageable) {
-        return productService.findProductByNameAndReceipt(name, receiptId, pageable);
+        return productRepository.findByNameIgnoreCaseContaining("", pageable);
     }
 }

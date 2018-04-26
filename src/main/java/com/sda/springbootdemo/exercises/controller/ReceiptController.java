@@ -1,5 +1,6 @@
 package com.sda.springbootdemo.exercises.controller;
 
+import com.sda.springbootdemo.exercises.exception.BindingResultException;
 import com.sda.springbootdemo.exercises.exception.NotFoundException;
 import com.sda.springbootdemo.exercises.model.Receipt;
 import com.sda.springbootdemo.exercises.repository.ReceiptRepository;
@@ -7,9 +8,11 @@ import com.sda.springbootdemo.exercises.service.ReceiptService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,7 +36,10 @@ public class ReceiptController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Receipt create(@RequestBody Receipt receipt) {
+    public Receipt create(@RequestBody @Valid Receipt receipt, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new BindingResultException(bindingResult.getFieldErrors());
+        }
         return receiptRepository.save(receipt);
     }
 

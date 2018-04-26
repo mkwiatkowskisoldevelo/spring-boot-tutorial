@@ -42,4 +42,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
         Double minPrice,
         Double maxPrice,
         Pageable pageable);
+
+
+    Page<Product> findByNameIgnoreCaseContaining(String name, Pageable pageable);
 }

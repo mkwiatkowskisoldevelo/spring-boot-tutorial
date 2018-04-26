@@ -30,7 +30,9 @@ public class Receipt2 extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "receipt_products",
-        joinColumns = @JoinColumn(name = "receipt_id", nullable = false),
-        inverseJoinColumns = @JoinColumn(name = "product_id", nullable = false))
+        joinColumns =
+        @JoinColumn(name = "receipt_id", nullable = false),
+        inverseJoinColumns =
+        @JoinColumn(name = "product_id", nullable = false))
     private List<Product> products;
 }
