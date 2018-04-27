@@ -6,6 +6,10 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +24,12 @@ import lombok.ToString;
 @Table(name="receipts")
 public class Receipt extends BaseEntity {
 
+    @NotNull
+    @Size(min = 3, max = 8)
+    @Pattern.List({
+        @Pattern(regexp = "(?=.*[0-9]).+", message = "must contain at least 1 number"),
+        @Pattern(regexp = "(?=\\S+$).+", message = "must not contain spaces")
+    })
     @Column(nullable = false, name = "buyer")
     private String buyer;
 

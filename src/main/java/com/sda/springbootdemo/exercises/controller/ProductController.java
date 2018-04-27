@@ -1,8 +1,10 @@
 package com.sda.springbootdemo.exercises.controller;
 
 import com.sda.springbootdemo.exercises.model.Product;
+import com.sda.springbootdemo.exercises.model.Receipt2;
 import com.sda.springbootdemo.exercises.repository.ProductRepository;
 import com.sda.springbootdemo.exercises.service.ProductService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -123,8 +125,9 @@ public class ProductController {
      */
     @GetMapping("/byName")
     @ResponseStatus(HttpStatus.OK)
-    public Product findByName(@RequestParam(value = "name") String name) {
-        return productService.findProductByNameIgnoreCase(name);
+    public List<Receipt2> findByName(
+        @RequestParam(value = "name") String name) {
+        return productRepository.search(name);
     }
 
     @GetMapping("/byNamePaged")

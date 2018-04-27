@@ -54,7 +54,7 @@ public class ControllerExceptionHandler {
      * @return field errors from exception that will be used for response
      */
     @ExceptionHandler(BindingResultException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ResponseBody
     public List<FieldError> handleNotFoundException(BindingResultException ex) {
         return ex.getErrors();
